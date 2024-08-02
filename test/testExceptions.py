@@ -20,13 +20,39 @@
 # THE SOFTWARE.
 # -----------------------------------------------------------------------------
 
-DENKOVI_ID = "DAE"
+# Some quick tests. You need to be connected to the board for testing. Unhandled exceptions are a fail. Comment depending on attached board.
+
+# Example Code. Set Com port below:
+COMPORT = "COM8"
+
+import time
+import dae_RelayBoard
+from dae_RelayBoard.dae_RelayBoard_Common import Denkovi_Exception
 
 
-class Denkovi_Exception(Exception, object):
+def testException(function, *args):
+    try:
+        function(*args)
+    except Denkovi_Exception as inst:
+        print("Expected Exception: " + str(inst))
 
-    def __init__(self, string):
-        self.string = string
 
-    def __str__(self):
-        return self.string
+def testBoard(boardType, numRelays, devID=None):
+    dr = dae_RelayBoard.DAE_RelayBoard(boardType)
+    testException(dr.setAllStatesOn)
+    if devID is not None:
+        dr.initialise(devID)
+    else:
+        dr.initialise()
+    testException(dr.setState, numRelays + 1, True)
+    testException(dr.getState, numRelays + 1)
+    testException(dr.setState, 0, True)
+    testException(dr.getState, 0)
+    dr.disconnect()
+
+
+testException(dae_RelayBoard.DAE_RelayBoard, 99999)
+
+# testBoard(dae_RelayBoard.DAE_RELAYBOARD_TYPE_4, 4)
+# testBoard(dae_RelayBoard.DAE_RELAYBOARD_TYPE_8, 8)
+testBoard(dae_RelayBoard.DAE_RELAYBOARD_TYPE_16, 16, COMPORT)

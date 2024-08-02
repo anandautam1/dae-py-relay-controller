@@ -20,13 +20,56 @@
 # THE SOFTWARE.
 # -----------------------------------------------------------------------------
 
-DENKOVI_ID = "DAE"
+# Example Code
 
+import time
+import dae_RelayBoard
 
-class Denkovi_Exception(Exception, object):
+dr = dae_RelayBoard.DAE_RelayBoard(dae_RelayBoard.DAE_RELAYBOARD_TYPE_4)
 
-    def __init__(self, string):
-        self.string = string
+dr.initialise()
 
-    def __str__(self):
-        return self.string
+dr.setAllStatesOff()
+
+# Turn on one-by-one
+for r in range(1, dr.getNumRelays() + 1):
+    dr.setState(r, True)
+    time.sleep(0.5)
+    print(dr.getStates())
+
+# Turn off one-by-one
+for r in range(1, dr.getNumRelays() + 1):
+    dr.setState(r, False)
+    time.sleep(0.5)
+    print(dr.getStates())
+
+# Turn all on
+dr.setAllStatesOn()
+print(dr.getStates())
+time.sleep(0.5)
+
+# Turn all off
+dr.setAllStatesOff()
+time.sleep(0.5)
+print(dr.getStates())
+
+# Turn even on
+evenStates = {}
+for relay in range(1, dr.getNumRelays() + 1):
+    if relay % 2 == 0:
+        evenStates[relay] = True
+dr.setStates(evenStates)
+time.sleep(0.5)
+print(dr.getStates())
+
+# Turn first on
+dr.setState(1, True)
+time.sleep(0.5)
+print(dr.getStates())
+
+# Turn first off
+dr.setState(1, False)
+time.sleep(0.5)
+print(dr.getStates())
+
+dr.disconnect()
