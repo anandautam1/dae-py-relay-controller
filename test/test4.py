@@ -20,13 +20,7 @@
 # THE SOFTWARE.
 # -----------------------------------------------------------------------------
 
-DENKOVI_ID = "DAE"
+import testCommon
+import dae_RelayBoard
 
-
-class Denkovi_Exception(Exception, object):
-
-    def __init__(self, string):
-        self.string = string
-
-    def __str__(self):
-        return self.string
+testCommon.TestCommon(dae_RelayBoard.DAE_RELAYBOARD_TYPE_4)

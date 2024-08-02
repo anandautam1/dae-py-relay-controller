@@ -20,13 +20,24 @@
 # THE SOFTWARE.
 # -----------------------------------------------------------------------------
 
-DENKOVI_ID = "DAE"
+# Tests for the interval timings. Change below to test for different times:
+INTERVAL = 0.050
+# Set Com port below:
+COMPORT = "COM8"
+
+import time
+import testCommon
+import dae_RelayBoard
 
 
-class Denkovi_Exception(Exception, object):
+dr = dae_RelayBoard.DAE_RelayBoard(dae_RelayBoard.DAE_RELAYBOARD_TYPE_16, INTERVAL)
+dr.initialise(COMPORT)
 
-    def __init__(self, string):
-        self.string = string
+dr.setAllStatesOff()
+testCommon.testGetFunctions(dr, False)
 
-    def __str__(self):
-        return self.string
+for relay in range(1, dr.getNumRelays() + 1):
+    dr.setState(relay, True)
+    testCommon.testGetFunctions(dr, False)
+
+dr.disconnect()

@@ -20,13 +20,15 @@
 # THE SOFTWARE.
 # -----------------------------------------------------------------------------
 
-DENKOVI_ID = "DAE"
+import testCommon
+import dae_RelayBoard
 
+testCommon.TestCommon(dae_RelayBoard.DAE_RELAYBOARD_TYPE_8)
 
-class Denkovi_Exception(Exception, object):
+# Multiple board support - Test with first board:
 
-    def __init__(self, string):
-        self.string = string
+# testCommon.TestCommon(dae_RelayBoard.DAE_RELAYBOARD_TYPE_8, 'DAE#0')
 
-    def __str__(self):
-        return self.string
+# Test with second board:
+
+# testCommon.TestCommon(dae_RelayBoard.DAE_RELAYBOARD_TYPE_8, 'DAE#1')
